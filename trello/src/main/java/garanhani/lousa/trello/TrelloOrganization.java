@@ -15,7 +15,7 @@ public class TrelloOrganization {
 	}
 	
 	public List<TrelloBoardData> getAllBoards(){
-		JSONArray allBoards = new JSONArray(getAllBoardsString());
+		JSONArray allBoards = getAllBoardsJSON();
 		List<TrelloBoardData> allBoardsData = new ArrayList<TrelloBoardData>();
 		for(int i = 0; i < allBoards.length(); i++){
 			allBoardsData.add( new TrelloBoardData(allBoards.getJSONObject(i)) );
@@ -47,10 +47,6 @@ public class TrelloOrganization {
 			e.printStackTrace();
 		}
 		return null;
-	}
-	
-	public void setOrganization( String name ) {
-		orgName = name;
 	}
 	
 	private TrelloConnect trello;

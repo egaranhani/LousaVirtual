@@ -7,8 +7,9 @@ import org.json.JSONArray;
 
 public class TrelloBoard {
 
-	public TrelloBoard(){
+	public TrelloBoard( String id ){
 		trello = new TrelloConnect("LousaVirtual");
+		boardId = id;
 	}
 	
 	public String getAllBoards() {
@@ -16,8 +17,8 @@ public class TrelloBoard {
 		return trello.getPrivateCommand(boardCommand, paramCommands);
 	}
 	
-	public List<TrelloListData> getAllLists(String boardShortUrl) {
-		JSONArray listsJSON = getAllListsJSON(boardShortUrl);
+	public List<TrelloListData> getAllLists() {
+		JSONArray listsJSON = getAllListsJSON();
 		List<TrelloListData> lists = new ArrayList<TrelloListData>();
 		for(int i = 0; i < listsJSON.length(); i++)
 			lists.add(new TrelloListData(listsJSON.getJSONObject(i)));
@@ -25,24 +26,38 @@ public class TrelloBoard {
 		return lists;
 	}
 
-	public String getAllCardsString(String boardShortUrl){
-		String command = boardCommand + "/" + boardShortUrl + "/" + cardsCommand;
+	public TrelloListData getList(String listName) {
+		List<TrelloListData> allLists = getAllLists();
+		for (TrelloListData list : allLists) {
+			if(list.name().equals(listName))
+				return list;
+		}
+		return null;
+	}
+
+	protected String getAllCardsString(){
+		String command = boardCommand + "/" + boardId + "/" + cardsCommand;
 		return trello.getPrivateCommand(command);
 	}
 	
-	public String getAllListsString(String boardShortUrl){
-		String command = boardCommand + "/" + boardShortUrl + "/" + listsCommand;
+	protected String getAllListsString(){
+		String command = boardCommand + "/" + boardId + "/" + listsCommand;
 		return trello.getPrivateCommand(command);
 	}
 	
-	public JSONArray getAllListsJSON(String boardShortUrl){
-		JSONArray ja = new JSONArray(getAllListsString(boardShortUrl));
+	protected JSONArray getAllListsJSON(){
+		JSONArray ja = new JSONArray(getAllListsString());
 		return ja;
 	}
 	
+	public JSONArray getAllCardsJSON() {
+		return new JSONArray(getAllCardsString());
+	}
+
 	private TrelloConnect trello;
 	private String boardCommand = "boards";
 	private String allBoardsCommand = "open";
 	private String listsCommand = "lists";
 	private String cardsCommand = "cards";
+	private String boardId;
 }
