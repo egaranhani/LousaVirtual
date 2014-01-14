@@ -46,7 +46,7 @@ public class TrelloBoardTest extends TestCase {
 	public void testGetAllCardsString(){
 		TrelloBoard board = new TrelloBoard(TrelloTest.BOARD_ID);
 		String allCards = board.getAllCardsString();
-		String expected = "[{\"id\":\"5240f49b675605852c0070c5\",\"badges\":{\"votes\"";
+		String expected = "[{\"id\":\"5240f49b675605852c0070c5\",";
 		Assert.assertTrue(allCards.startsWith(expected));
 	}
 

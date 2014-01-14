@@ -13,7 +13,7 @@ public class TrelloListTest extends TestCase {
 	public void testGetAllCardsString() {
 		TrelloList list = new TrelloList(TrelloTest.LIST_ID);
 		String allCardsString = list.getAllCardsString();
-		String expected = "[{\"id\":\"5240f49b675605852c0070c5\",\"badges\":{\"votes\":0,\"viewingMemberVoted\"";
+		String expected = "[{\"id\":\"5240f49b675605852c0070c5\"";
 		Assert.assertTrue(allCardsString.startsWith(expected));
     }
 
@@ -29,11 +29,11 @@ public class TrelloListTest extends TestCase {
 
 	public void testGetAllCards() {
 		TrelloList list = new TrelloList(TrelloTest.LIST_ID);
-		List<TrelloListData> allCards = list.getAllCards();
+		List<TrelloCardData> allCards = list.getAllCards();
 		
 		Assert.assertEquals(1, allCards.size());
 		
-		TrelloListData testCard = allCards.get(0);
+		TrelloCardData testCard = allCards.get(0);
 		Assert.assertEquals("UnitTestCard", testCard.name());
     }
 }
