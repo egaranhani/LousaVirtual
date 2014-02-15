@@ -1,24 +1,21 @@
 package garanhani.lousa.trello;
 
-import org.json.JSONObject;
 
 public class TrelloListData {
-	private static String NAME = "name";
-	private static String ID = "id";
-
-	private String name;
-	private String id;
+	public String id;
 	
-	public TrelloListData( JSONObject jo ) {
-		id = jo.getString(ID);
-		name = jo.getString(NAME);
-	}
+	public String name;
 	
-	public String name(){
-		return name;
-	}
+	public boolean closed;
 	
-	public String id(){
-		return id;
+	public String idBoard;
+	
+	public int pos;
+	
+	public boolean subscribed;
+	
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "{name:\"" + name + "\"}";
 	}
 }

@@ -1,55 +1,28 @@
 package garanhani.lousa.trello;
 
-import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-public class TrelloOrganization {
+public class TrelloOrganization extends TrelloClient {
 
 	public TrelloOrganization( String name ) {
-		trello = new TrelloConnect("LousaVirtual");
+		super();
 		orgName = name;
 	}
 	
 	public List<TrelloBoardData> getAllBoards(){
-		JSONArray allBoards = getAllBoardsJSON();
-		List<TrelloBoardData> allBoardsData = new ArrayList<TrelloBoardData>();
-		for(int i = 0; i < allBoards.length(); i++){
-			allBoardsData.add( new TrelloBoardData(allBoards.getJSONObject(i)) );
-		}
-		return allBoardsData;
+		String command = orgCommand + "/" + orgName + "/" + allBoardsCommand;
+		return Arrays.asList(getPrivate(TrelloBoardData[].class, command, (String[])null));
 	}
-
-	public TrelloBoardData getBoard(String searchName) {
-		JSONArray allBoards = getAllBoardsJSON();
-		for(int i = 0; i < allBoards.length(); i++){
-			JSONObject board = allBoards.getJSONObject(i);
-			TrelloBoardData boardData = new TrelloBoardData(board);
-			if(boardData.name().equals(searchName))
-				return boardData;
+	
+	public TrelloBoardData getBoard(String name){
+		for (TrelloBoardData board : getAllBoards()) {
+			if(board.name.equals(name))
+				return board;
 		}
 		return null;
 	}
 	
-	protected JSONArray getAllBoardsJSON(){
-		JSONArray allBoards = new JSONArray(getAllBoardsString());
-		return allBoards;
-	}
-
-	protected String getAllBoardsString(){
-		String command = trello.assembleCommand(orgCommand, orgName, allBoardsCommand);
-		try {
-			return trello.get(trello.composePrivateUrl(command, null));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	private TrelloConnect trello;
 	private String orgCommand = "organizations";
 	private String allBoardsCommand = "boards";
 	private String orgName;

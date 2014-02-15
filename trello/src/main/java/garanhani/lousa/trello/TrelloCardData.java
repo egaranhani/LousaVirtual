@@ -1,24 +1,58 @@
 package garanhani.lousa.trello;
 
-import org.json.JSONObject;
+import java.util.List;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TrelloCardData {
-	private static String NAME = "name";
-	private static String ID = "id";
+	public String id;
 
-	private String name;
-	private String id;
+//	public Badge badges;
 
-	TrelloCardData(JSONObject card){
-		id = card.getString(ID);
-		name = card.getString(NAME);
-	}
+	public List<String> checkItemStates;
 
-	public String name() {
-		return name;
-	}
+	public boolean closed;
 
-	public String id() {
-		return id;
+	public String dateLastActivity;
+
+	public String desc;
+
+//	public DescData descData;
+
+	public String due;
+
+	public String idBoard;
+
+	public List<String> idChecklists;
+
+	public String idList;
+
+	public List<String> idMembers;
+
+	public List<String> idMembersVoted;
+
+	public String idShort;
+
+	public String idAttachmentCover;
+
+	public String manualCoverAttachment;
+
+//	public List<Label> labels;
+
+	public String name;
+
+	public String pos;
+
+	public String shortLink;
+
+	public String shortUrl;
+
+	public boolean subscribed;
+
+	public String url;
+	
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "{name:\"" + name + "\"}";
 	}
 }
