@@ -1,11 +1,9 @@
 package garanhani.lousa.trello;
 
-public class TrelloCards {
+public class TrelloCards extends TrelloClient {
 
 	public TrelloCards() {
-		trello = new TrelloConnect("LousaVirtual");
+		super();
 	}
-	
-	private TrelloConnect trello;
 
 }

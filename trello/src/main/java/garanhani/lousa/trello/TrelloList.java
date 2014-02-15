@@ -1,38 +1,20 @@
 package garanhani.lousa.trello;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import org.json.JSONArray;
 
-
-public class TrelloList {
+public class TrelloList extends TrelloClient {
 	
-	public TrelloList(String id) {
-		trello = new TrelloConnect("LousaVirtual");
-		listId = id;
+	public TrelloList() {
+		super();
 	}
 
-	protected String getAllCardsString() {
+	protected List<TrelloCardData> getAllCards( String listId ) {
 		String command = listCommand + "/" + listId + "/" + allCardsCommand;
-		return trello.getPrivateCommand(command, null);
+		return Arrays.asList(getPrivate(TrelloCardData[].class, command, (String[])null));
 	}
-	
-	protected JSONArray getAllCardsJSON() {
-		return new JSONArray(getAllCardsString());
-	}
-	
-	public List<TrelloCardData> getAllCards(){
-		List<TrelloCardData> allCards = new ArrayList<TrelloCardData>();
-		JSONArray arr = getAllCardsJSON();
-		for(int i = 0; i < arr.length(); i++){
-			allCards.add(new TrelloCardData(arr.getJSONObject(i)));
-		}
-		return allCards;
-	}
-	
+		
 	private String listCommand = "lists";
 	private String allCardsCommand = "cards";
-	private String listId;
-	private TrelloConnect trello;
 }
