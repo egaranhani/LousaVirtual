@@ -25,5 +25,6 @@
   <modules>
  	<module>trello</module>
  	<module>json</module>
+ 	<module>jsonhttpclient</module>
   </modules>
 </project>

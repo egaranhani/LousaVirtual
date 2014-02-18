@@ -7,9 +7,6 @@ import garanhani.lousa.trello.TrelloListData;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 public class TrelloBoardTest extends TestCase {
 	public void testGetAllListsFromABoard(){
 		TrelloBoard board = new TrelloBoard();

@@ -55,4 +55,9 @@ public class TrelloCardData {
 	public String toString() {
 		return getClass().getSimpleName() + "{name:\"" + name + "\"}";
 	}
+	
+	@Override
+	public boolean equals(Object card){
+		return this.id.equals(((TrelloCardData)card).id);
+	}
 }

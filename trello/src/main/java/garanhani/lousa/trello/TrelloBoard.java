@@ -10,12 +10,12 @@ public class TrelloBoard extends TrelloClient {
 	}
 	
 	public List<TrelloListData> getAllLists(String boardId) {
-		String command = boardCommand + "/" + boardId + "/" + listsCommand;
+		String command = composeCommand(boardCommand, boardId, listsCommand);
 		return Arrays.asList(getPrivate(TrelloListData[].class, command, (String[])null));
 	}
 
 	public List<TrelloCardData> getAllCards(String boardId) {
-		String command = boardCommand + "/" + boardId + "/" + cardsCommand;
+		String command = composeCommand(boardCommand, boardId, cardsCommand);
 		return Arrays.asList(getPrivate(TrelloCardData[].class, command, (String[])null));
 	}
 
