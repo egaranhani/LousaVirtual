@@ -26,13 +26,6 @@
     	<groupId>com.sumersoft</groupId>
     	<artifactId>sumersoft-jsonapi-httpclient</artifactId>
     	<version>1.0.0-snapshot</version>
-    	<scope>provided</scope>
-    </dependency>
-    <dependency>
-    	<groupId>com.sumersoft</groupId>
-    	<artifactId>sumersoft-jsonapi-httpclient</artifactId>
-    	<version>1.0.0-snapshot</version>
-    	<scope>provided</scope>
     </dependency>
 	<dependency>
 		<groupId>org.apache.httpcomponents</groupId>

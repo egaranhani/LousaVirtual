@@ -40,7 +40,7 @@ public class PopulaLousa {
 		builder.append("(" + "(https://jira.objective.com.br/browse/" + issue + ")");
 		return builder.toString();
 	}
-	
+
 	public static void main(String[] args) {
 		
 	}
