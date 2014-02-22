@@ -22,13 +22,10 @@ public class TrelloClient {
 	public TrelloClient() {
 		trelloUrl = "https://api.trello.com/1/";
 		appKey = "6aeb54de579573127eb37a135c84f0b9";
-		authToken = "d5f79a22680c08fa03b70c9d1bcef035c7bdb7a911b99b14ed3757c81f201d27";
+//		authToken = "d5f79a22680c08fa03b70c9d1bcef035c7bdb7a911b99b14ed3757c81f201d27";
+		authToken = "05dda0f56a0b3300f114e33ca0006f99201aa30b0793cd5cecabd077ae597224";
 		jsonHttpClient = new DefaultJsonApiHttpClientFactory().create( trelloUrl );
 	}
-	
-//	public void setApplication(String appName){
-//		trelloAppName = appName;
-//	}
 	
 	protected String composeCommand(String ... params){
 		StringBuilder builder = new StringBuilder(params[0]);
@@ -117,6 +114,4 @@ public class TrelloClient {
 	private String appKey;
 	private String authToken;
 	private String trelloUrl;
-//	private String trelloAppName;
-
 }

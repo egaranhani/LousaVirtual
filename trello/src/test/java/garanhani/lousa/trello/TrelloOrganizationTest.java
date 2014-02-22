@@ -26,4 +26,9 @@ public class TrelloOrganizationTest extends TestCase {
 		Assert.assertEquals(TrelloTest.BOARD_SHORT_URL, board.shortUrl);
 	}
 
+	public void testGetAllBoardsFromObjective(){
+		TrelloOrganization org = new TrelloOrganization("objective1");
+		List<TrelloBoardData> allBoards = org.getAllBoards();
+	}
+	
 }

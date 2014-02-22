@@ -11,7 +11,7 @@ public class TrelloBoardData {
 
 	public String desc;
 
-	public String descData;
+//	public String descData;
 
 	public boolean closed;
 

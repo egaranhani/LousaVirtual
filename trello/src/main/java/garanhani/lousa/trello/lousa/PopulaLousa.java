@@ -6,6 +6,7 @@ import garanhani.lousa.trello.TrelloCards;
 import garanhani.lousa.trello.TrelloListData;
 import garanhani.lousa.trello.TrelloOrganization;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class PopulaLousa {
@@ -16,7 +17,7 @@ public class PopulaLousa {
 	}
 	
 	public void createIssue(String jiraIssueChamado, String issueDesc, List<String> jiraIssueBugs){
-		TrelloOrganization org = new TrelloOrganization("Objective");
+		TrelloOrganization org = new TrelloOrganization("objective1");
 		TrelloBoardData board = org.getBoard(boardName);
 		
 		TrelloBoard boardClient = new TrelloBoard();
@@ -37,11 +38,17 @@ public class PopulaLousa {
 		StringBuilder builder = new StringBuilder();
 		builder.append(type);
 		builder.append(": [" + issue + "]");
-		builder.append("(" + "(https://jira.objective.com.br/browse/" + issue + ")");
+		builder.append("(https://jira.objective.com.br/browse/" + issue + ")");
 		return builder.toString();
 	}
 
 	public static void main(String[] args) {
-		
+		PopulaLousa populator = new PopulaLousa("Copel - Build Abril");
+		LoadIssuesFile fileLoader = new LoadIssuesFile("C:\\Desenvolvimento\\taskboard-trello-client\\Teste carregamento bugs.csv");
+		FileContent line;
+		while((line = fileLoader.nextData()) != null){
+			populator.createIssue(line.issue, line.desc, Arrays.asList(line.bugIssues));
+		}
 	}
+
 }
