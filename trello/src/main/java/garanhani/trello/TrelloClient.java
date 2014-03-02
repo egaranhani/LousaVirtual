@@ -1,7 +1,11 @@
-package garanhani.lousa.trello;
+package garanhani.trello;
+
+import garanhani.utils.StringUtils;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Arrays;
+import java.util.List;
 
 import com.sumersoft.jsonapihttpclient.DefaultJsonApiHttpClientFactory;
 import com.sumersoft.jsonapihttpclient.JsonApiHttpClient;
@@ -25,6 +29,70 @@ public class TrelloClient {
 //		authToken = "d5f79a22680c08fa03b70c9d1bcef035c7bdb7a911b99b14ed3757c81f201d27";
 		authToken = "05dda0f56a0b3300f114e33ca0006f99201aa30b0793cd5cecabd077ae597224";
 		jsonHttpClient = new DefaultJsonApiHttpClientFactory().create( trelloUrl );
+	}
+	
+	public List<TrelloBoard> getAllBoards(String orgName){
+		String command = TrelloOrganizationCommands.orgCommand + "/" + orgName + "/" + TrelloOrganizationCommands.allBoardsCommand;
+		return Arrays.asList(getPrivate(TrelloBoard[].class, command, (String[])null));
+	}
+	
+	public TrelloBoard getBoard(String orgName, String boardName){
+		for (TrelloBoard board : getAllBoards(orgName))
+			if(board.name.equals(boardName))
+				return board;
+		return null;
+	}
+
+	public TrelloBoard getBoard(String boardId) {
+		String command = composeCommand(TrelloBoardCommands.boardCommand, boardId);
+		return getPrivate(TrelloBoard.class, command, (String[])null);
+	}
+
+	public List<TrelloList> getAllLists(TrelloBoard board) {
+		String command = TrelloBoardCommands.boardCommand + "/" + board.id + "/" + TrelloBoardCommands.listsCommand;
+		return Arrays.asList(getPrivate(TrelloList[].class, command, (String[])null));
+	}
+
+	protected List<TrelloCard> getAllCards(TrelloList list) {
+		String command = TrelloListCommands.listCommand + "/" + list.id + "/" + TrelloListCommands.allCardsCommand;
+		return Arrays.asList(getPrivate(TrelloCard[].class, command, (String[])null));
+	}
+		
+	public List<TrelloCard> getAllCards(TrelloBoard board) {
+		String command = TrelloBoardCommands.boardCommand + "/" + board.id + "/" + TrelloBoardCommands.cardsCommand;
+		return Arrays.asList(getPrivate(TrelloCard[].class, command, (String[])null));
+	}
+
+	public TrelloList getList(String listId){
+		return getPrivate(TrelloList.class, TrelloListCommands.listCommand, (String[])null);
+	}
+	
+	public TrelloList getList(TrelloBoard board, String listName){
+		List<TrelloList> lists = getAllLists(board);
+		for (TrelloList list : lists) {
+			if(list.name.equals(listName))
+				return list;
+		}
+		return null;
+	}
+	
+	public TrelloCard createCard(TrelloList list, String name, String desc, String ... labels){
+		if(labels == null || labels.length == 0)
+			return post(TrelloCard.class, TrelloCardsCommands.cardCommand, "name", name, "idList", list.id, "desc", desc);
+		return post(TrelloCard.class, TrelloCardsCommands.cardCommand, "name", name, "idList", list.id, "desc", desc, "labels", StringUtils.toStringCommaSeparated(labels));
+	}
+
+	public TrelloCard getCard(String id){
+		return getPrivate(TrelloCard.class, composeCommand(TrelloCardsCommands.cardCommand, id));
+	}
+	
+	public void deleteCard(TrelloCard card){
+		delete(TrelloCardsCommands.cardCommand, card.id);
+	}
+	
+	public void addComment(TrelloCard card, String comment){
+		String command = composeCommand(TrelloCardsCommands.cardCommand, card.id, TrelloCardsCommands.commentsCommand);
+		post(TrelloCard.class, command, "text", comment);
 	}
 	
 	protected String composeCommand(String ... params){

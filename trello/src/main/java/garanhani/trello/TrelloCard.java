@@ -1,10 +1,10 @@
-package garanhani.lousa.trello;
+package garanhani.trello;
 
 import java.util.List;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TrelloCardData {
+public class TrelloCard {
 	public String id;
 
 //	public Badge badges;
@@ -37,7 +37,7 @@ public class TrelloCardData {
 
 	public String manualCoverAttachment;
 
-//	public List<Label> labels;
+	public List<Label> labels;
 
 	public String name;
 
@@ -58,6 +58,6 @@ public class TrelloCardData {
 	
 	@Override
 	public boolean equals(Object card){
-		return this.id.equals(((TrelloCardData)card).id);
+		return this.id.equals(((TrelloCard)card).id);
 	}
 }

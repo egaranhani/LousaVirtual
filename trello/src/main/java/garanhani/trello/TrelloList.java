@@ -1,7 +1,7 @@
-package garanhani.lousa.trello;
+package garanhani.trello;
 
 
-public class TrelloListData {
+public class TrelloList {
 	public String id;
 	
 	public String name;

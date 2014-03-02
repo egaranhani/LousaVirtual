@@ -1,10 +1,10 @@
-package garanhani.lousa.trello;
+package garanhani.trello;
 
 import java.util.List;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TrelloBoardData {
+public class TrelloBoard {
 	public String id;
 
 	public String name;

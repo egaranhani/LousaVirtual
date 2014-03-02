@@ -1,4 +1,4 @@
-package garanhani.lousa.trello.lousa;
+package garanhani.trello.lousa;
 
 import java.util.StringTokenizer;
 
