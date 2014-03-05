@@ -1,11 +1,8 @@
 package garanhani.trello;
 
 import java.util.List;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class TrelloBoard {
-	public String id;
+public class TrelloBoard extends TrelloModel {
 
 	public String name;
 
@@ -44,7 +41,7 @@ public class TrelloBoard {
 	public String dateLastView;
 	
 	@Override
-	public String toString() {
-		return getClass().getSimpleName() + "{name:\"" + name + "\"}";
+	protected String prettyName() {
+		return name;
 	}
 }

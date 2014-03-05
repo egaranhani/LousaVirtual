@@ -1,8 +1,6 @@
 package garanhani.trello;
 
-
-public class TrelloList {
-	public String id;
+public class TrelloList extends TrelloModel {
 	
 	public String name;
 	
@@ -15,7 +13,7 @@ public class TrelloList {
 	public boolean subscribed;
 	
 	@Override
-	public String toString() {
-		return getClass().getSimpleName() + "{name:\"" + name + "\"}";
+	protected String prettyName() {
+		return name;
 	}
 }

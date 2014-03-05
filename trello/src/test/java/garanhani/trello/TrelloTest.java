@@ -1,16 +1,6 @@
 package garanhani.trello;
 
-import junit.framework.TestSuite;
-
-/**
- * Unit test for simple App.
- */
-class TrelloTest extends TestSuite {
-
-	public TrelloTest( String testName ) {
-        super( testName );
-    }
-
+class TrelloTest {
 	static final String ORGANIZATION = "unittestorg";
 	static final String BOARD_NAME = "UnitTestBoard";
 	static final String BOARD_ID = "5212b4def3e8b8ae33000aea";
@@ -23,5 +13,6 @@ class TrelloTest extends TestSuite {
 	static final String CARD_NAME = "UnitTestCard 2";
 	static final String CARD_DESCRIPTION = "UnitTestCardDesc";
 	static final String [] LIST_NAMES = {"To Do", "Doing", "Done"};
-
+	static final String WEBHOOK_DESC = "UnitTestWebhook";
+	static final String WEBHOOK_CALLBACK = "http://egaranhani.servehttp.com:9998";
 }

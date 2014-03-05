@@ -36,7 +36,7 @@ public class PopulaLousa {
 	
 	public void deleteTestCards(){
 		TrelloBoard board = trello.getBoard(orgName, boardName);
-		List<TrelloCard> cards = trello.getAllCards(board);
+		List<TrelloCard> cards = trello.getCards(board);
 		for (TrelloCard card : cards) {
 			if(card.name.equals("UnitTestCard 2"))
 				trello.deleteCard(card);

@@ -7,68 +7,72 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
-import com.sumersoft.jsonapihttpclient.DefaultJsonApiHttpClientFactory;
-import com.sumersoft.jsonapihttpclient.JsonApiHttpClient;
-import com.sumersoft.jsonapihttpclient.http.StatusCodeException;
-import com.sumersoft.jsonapihttpclient.http.uri.DefaultUriBuilderHome;
-import com.sumersoft.jsonapihttpclient.http.uri.UriBuilder;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.util.EntityUtils;
 
-public class TrelloClient {
+import com.sumersoft.jsonapihttpclient.DefaultJsonApiHttpClientFactory;
+import com.sumersoft.jsonapihttpclient.JsonApiHttpClient;
+import com.sumersoft.jsonapihttpclient.http.StatusCodeException;
+import com.sumersoft.jsonapihttpclient.http.uri.DefaultUriBuilderHome;
+import com.sumersoft.jsonapihttpclient.http.uri.UriBuilder;
+import com.sumersoft.jsonapihttpclient.json.JsonDeserializer;
+
+public class TrelloClient implements BoardsService, CardsService, ListService, OrganizationService, WebhookService {
 	public TrelloClient() {
 		trelloUrl = "https://api.trello.com/1/";
 		appKey = "6aeb54de579573127eb37a135c84f0b9";
-//		authToken = "d5f79a22680c08fa03b70c9d1bcef035c7bdb7a911b99b14ed3757c81f201d27";
+//		authToken = "d5f79a22680c08fa03b70c9d1bc ef035c7bdb7a911b99b14ed3757c81f201d27";
 		authToken = "05dda0f56a0b3300f114e33ca0006f99201aa30b0793cd5cecabd077ae597224";
 		jsonHttpClient = new DefaultJsonApiHttpClientFactory().create( trelloUrl );
+		jsonDeserializer = new JsonDeserializer();
 	}
 	
-	public List<TrelloBoard> getAllBoards(String orgName){
-		String command = TrelloOrganizationCommands.orgCommand + "/" + orgName + "/" + TrelloOrganizationCommands.allBoardsCommand;
+	public List<TrelloBoard> getBoards(String orgName){
+		String command = composeCommand(OrganizationService.orgCommand, orgName, OrganizationService.allBoardsCommand);
 		return Arrays.asList(getPrivate(TrelloBoard[].class, command, (String[])null));
 	}
 	
 	public TrelloBoard getBoard(String orgName, String boardName){
-		for (TrelloBoard board : getAllBoards(orgName))
+		for (TrelloBoard board : getBoards(orgName))
 			if(board.name.equals(boardName))
 				return board;
 		return null;
 	}
 
 	public TrelloBoard getBoard(String boardId) {
-		String command = composeCommand(TrelloBoardCommands.boardCommand, boardId);
+		String command = composeCommand(BoardsService.boardCommand, boardId);
 		return getPrivate(TrelloBoard.class, command, (String[])null);
 	}
 
-	public List<TrelloList> getAllLists(TrelloBoard board) {
-		String command = TrelloBoardCommands.boardCommand + "/" + board.id + "/" + TrelloBoardCommands.listsCommand;
+	public List<TrelloList> getLists(TrelloBoard board) {
+		String command = composeCommand(BoardsService.boardCommand, board.id, BoardsService.listsCommand);
 		return Arrays.asList(getPrivate(TrelloList[].class, command, (String[])null));
 	}
 
-	protected List<TrelloCard> getAllCards(TrelloList list) {
-		String command = TrelloListCommands.listCommand + "/" + list.id + "/" + TrelloListCommands.allCardsCommand;
+	public List<TrelloCard> getCards(TrelloList list) {
+		String command = composeCommand(ListService.listCommand, list.id, ListService.allCardsCommand);
 		return Arrays.asList(getPrivate(TrelloCard[].class, command, (String[])null));
 	}
-		
-	public List<TrelloCard> getAllCards(TrelloBoard board) {
-		String command = TrelloBoardCommands.boardCommand + "/" + board.id + "/" + TrelloBoardCommands.cardsCommand;
+
+	public List<TrelloCard> getCards(TrelloBoard board) {
+		String command = composeCommand(BoardsService.boardCommand, board.id, BoardsService.cardsCommand);
 		return Arrays.asList(getPrivate(TrelloCard[].class, command, (String[])null));
 	}
 
 	public TrelloList getList(String listId){
-		return getPrivate(TrelloList.class, TrelloListCommands.listCommand, (String[])null);
+		String command = composeCommand(ListService.listCommand, listId);
+		return getPrivate(TrelloList.class, command, (String[])null);
 	}
 	
 	public TrelloList getList(TrelloBoard board, String listName){
-		List<TrelloList> lists = getAllLists(board);
+		List<TrelloList> lists = getLists(board);
 		for (TrelloList list : lists) {
 			if(list.name.equals(listName))
 				return list;
@@ -78,64 +82,79 @@ public class TrelloClient {
 	
 	public TrelloCard createCard(TrelloList list, String name, String desc, String ... labels){
 		if(labels == null || labels.length == 0)
-			return post(TrelloCard.class, TrelloCardsCommands.cardCommand, "name", name, "idList", list.id, "desc", desc);
-		return post(TrelloCard.class, TrelloCardsCommands.cardCommand, "name", name, "idList", list.id, "desc", desc, "labels", StringUtils.toStringCommaSeparated(labels));
+			return post(TrelloCard.class, CardsService.cardCommand, "name", name, "idList", list.id, "desc", desc);
+		return post(TrelloCard.class, CardsService.cardCommand, "name", name, "idList", list.id, "desc", desc, "labels", StringUtils.stringCommaSeparated(labels));
 	}
 
 	public TrelloCard getCard(String id){
-		return getPrivate(TrelloCard.class, composeCommand(TrelloCardsCommands.cardCommand, id));
+		return getPrivate(TrelloCard.class, composeCommand(CardsService.cardCommand, id));
 	}
 	
 	public void deleteCard(TrelloCard card){
-		delete(TrelloCardsCommands.cardCommand, card.id);
+		delete(CardsService.cardCommand, card.id);
 	}
 	
 	public void addComment(TrelloCard card, String comment){
-		String command = composeCommand(TrelloCardsCommands.cardCommand, card.id, TrelloCardsCommands.commentsCommand);
+		String command = composeCommand(CardsService.cardCommand, card.id, CardsService.commentsCommand);
 		post(TrelloCard.class, command, "text", comment);
 	}
 	
-	protected String composeCommand(String ... params){
-		StringBuilder builder = new StringBuilder(params[0]);
-		for (int i = 1; i < params.length; i++) {
-			builder.append("/" + params[i]);
-		}
-		return builder.toString();
+	public void createWebhook(String description, String callbackUrl, String idModel){
+		String command = composeCommand("webhooks");
+		String [] args = new String[6];
+		args[0] = "description";
+		args[1] = description;
+		args[2] = "callbackURL";
+		args[3] = callbackUrl;
+		args[0] = "idModel";
+		args[1] = idModel;
+		
+		TrelloWebhook wh = put(TrelloWebhook.class, command, args);
+		System.out.println(wh.toString());
+	}
+	
+	private String composeCommand(String ... params){
+		return StringUtils.stringSlashSeparated(params);
 	}
 	
 	protected <T> T getPrivate( Class<T> t, String command, String ... args){
-		int argsLenght = (args == null ? 0 : args.length);
-		String [] getArgs = new String[argsLenght+4];
-		getArgs[0] = "key";
-		getArgs[1] = appKey;
-		getArgs[2] = "token";
-		getArgs[3] = authToken;
-		for (int i = 0; i < argsLenght; i++) {
-			getArgs[i+4] = args[0];
-		}
+		String[] getArgs = argumentsWithKeyAndToken(args);
 		return jsonHttpClient.get(t, command, getArgs);
 	}
-	
+
 	protected <T> T getPublic(Class<T> t, String command, String ... args){
-		String [] getArgs = new String[args.length + 2];
-		getArgs[0] = "key";
-		getArgs[1] = appKey;
-		for (int i = 0; i < args.length; i++) {
-			getArgs[i+2] = args[0];
-		}
+		String[] getArgs = argumentsWithKey(args);
 		return jsonHttpClient.get(t, command, getArgs);
 	}
-	
+
 	protected <T> T post(Class<T> t, String command, String ... args){
-		String [] postArgs = new String[args.length+4];
-		postArgs[0] = "key";
-		postArgs[1] = appKey;
-		postArgs[2] = "token";
-		postArgs[3] = authToken;
-		for (int i = 0; i < args.length; i++) {
-			postArgs[i+4] = args[i];
-		}
+		String [] postArgs = argumentsWithKeyAndToken(args);
 		return jsonHttpClient.postWithQueryParams(t, command, postArgs);
+	}
+	
+	protected <T> T put(Class<T> t, String command, String ... args){
+		String [] putArgs = argumentsWithKeyAndToken(args);
+		return putWithQueryParams(t, command, putArgs);
+	}
+	
+	private <T> T putWithQueryParams(Class<T> t, String command, String ... putArgs){
+		DefaultUriBuilderHome uriBuilderHome = new DefaultUriBuilderHome();
+		String url = jsonHttpClient.getBaseUrl() + command;
+
+		UriBuilder uriBuilder = uriBuilderHome.create(url);
+	    for (int i = 0; i < putArgs.length; i += 2)
+	    	uriBuilder.addParameter(putArgs[i], putArgs[(i + 1)]);
+	    
+        URI uri = uriBuilder.build();
+		HttpPut putRequest = new HttpPut(uri);
+
+		System.err.println("PUT URL: " + uri);
+	    
+	    String responseString = execute(putRequest);
+	    if(responseString == null)
+	    	return null;
+	    
+		return jsonDeserializer.toObject(t, responseString);
 	}
 	
 	protected void delete(String command, String object){
@@ -151,6 +170,32 @@ public class TrelloClient {
 	    System.err.println("DELETE URL: " + uri);
 	    
 	    execute(deleteRequest);
+	}
+	
+	private String[] argumentsWithKey(String... args) {
+		String [] getArgs = new String[args.length + 2];
+		getArgs[0] = "key";
+		getArgs[1] = appKey;
+		for (int i = 0; i < args.length; i++) {
+			getArgs[i+2] = args[0];
+		}
+		return getArgs;
+	}
+	
+	private String[] argumentsWithKeyAndToken(String... args) {
+		int argsLenght = (args == null ? 0 : args.length);
+
+		if(argsLenght%2 != 0)
+			throw new RuntimeException("Lista de parâmetros deve conter número par de argumentos");
+
+		String [] getArgs = new String[argsLenght+4];
+		getArgs[0] = "key";
+		getArgs[1] = appKey;
+		getArgs[2] = "token";
+		getArgs[3] = authToken;
+		for (int i = 0; i < argsLenght; i++)
+			getArgs[i+4] = args[i];
+		return getArgs;
 	}
 	
 	private String execute(HttpUriRequest request)
@@ -179,6 +224,7 @@ public class TrelloClient {
 	}
 	  
 	protected final JsonApiHttpClient jsonHttpClient;
+	private JsonDeserializer jsonDeserializer;
 	private String appKey;
 	private String authToken;
 	private String trelloUrl;

@@ -1,7 +1,7 @@
 package garanhani.trello;
 
 
-public class TrelloOrganizationCommands {
+public interface OrganizationService {
 	static String orgCommand = "organizations";
 	static String allBoardsCommand = "boards";
 }

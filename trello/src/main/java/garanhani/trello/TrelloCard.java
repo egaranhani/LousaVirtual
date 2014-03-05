@@ -1,11 +1,8 @@
 package garanhani.trello;
 
 import java.util.List;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class TrelloCard {
-	public String id;
+public class TrelloCard extends TrelloModel {
 
 //	public Badge badges;
 
@@ -37,7 +34,7 @@ public class TrelloCard {
 
 	public String manualCoverAttachment;
 
-	public List<Label> labels;
+	public List<TrelloLabel> labels;
 
 	public String name;
 
@@ -52,12 +49,7 @@ public class TrelloCard {
 	public String url;
 	
 	@Override
-	public String toString() {
-		return getClass().getSimpleName() + "{name:\"" + name + "\"}";
-	}
-	
-	@Override
-	public boolean equals(Object card){
-		return this.id.equals(((TrelloCard)card).id);
+	protected String prettyName() {
+		return name;
 	}
 }
