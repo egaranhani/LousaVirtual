@@ -99,18 +99,23 @@ public class TrelloClient implements BoardsService, CardsService, ListService, O
 		post(TrelloCard.class, command, "text", comment);
 	}
 	
-	public void createWebhook(String description, String callbackUrl, String idModel){
+	public TrelloWebhook createWebhook(String description, String callbackUrl, String idModel){
 		String command = composeCommand("webhooks");
 		String [] args = new String[6];
 		args[0] = "description";
 		args[1] = description;
 		args[2] = "callbackURL";
 		args[3] = callbackUrl;
-		args[0] = "idModel";
-		args[1] = idModel;
+		args[4] = "idModel";
+		args[5] = idModel;
 		
 		TrelloWebhook wh = put(TrelloWebhook.class, command, args);
-		System.out.println(wh.toString());
+		return wh;
+	}
+	
+	public void deleteWebhook(String id){
+		String command = composeCommand("webhooks");
+		delete(command, id);
 	}
 	
 	private String composeCommand(String ... params){
@@ -138,10 +143,9 @@ public class TrelloClient implements BoardsService, CardsService, ListService, O
 	}
 	
 	private <T> T putWithQueryParams(Class<T> t, String command, String ... putArgs){
-		DefaultUriBuilderHome uriBuilderHome = new DefaultUriBuilderHome();
 		String url = jsonHttpClient.getBaseUrl() + command;
 
-		UriBuilder uriBuilder = uriBuilderHome.create(url);
+		UriBuilder uriBuilder = new NoEncodedUriBuilder(url);
 	    for (int i = 0; i < putArgs.length; i += 2)
 	    	uriBuilder.addParameter(putArgs[i], putArgs[(i + 1)]);
 	    

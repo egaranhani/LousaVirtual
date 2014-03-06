@@ -14,5 +14,5 @@ class TrelloTest {
 	static final String CARD_DESCRIPTION = "UnitTestCardDesc";
 	static final String [] LIST_NAMES = {"To Do", "Doing", "Done"};
 	static final String WEBHOOK_DESC = "UnitTestWebhook";
-	static final String WEBHOOK_CALLBACK = "http://egaranhani.servehttp.com:9998";
+	static final String WEBHOOK_CALLBACK = "http://egaranhani.servehttp.com/webhooks";
 }

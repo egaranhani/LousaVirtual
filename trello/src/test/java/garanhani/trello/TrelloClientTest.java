@@ -136,7 +136,10 @@ public class TrelloClientTest extends TestCase{
 
 	public void testCreateWebHooks(){
 		TrelloCard testCard = getTestCard();
-		trello.createWebhook(TrelloTest.WEBHOOK_DESC, TrelloTest.WEBHOOK_CALLBACK, testCard.id);
+		TrelloWebhook hook = trello.createWebhook(TrelloTest.WEBHOOK_DESC, TrelloTest.WEBHOOK_CALLBACK, testCard.id);
+		
+		Assert.assertEquals(true, hook != null);
+		deleteWebhook(hook);
 	}
 	
 	private void deleteCard(TrelloCard card){
@@ -147,6 +150,10 @@ public class TrelloClientTest extends TestCase{
 
 		allCards = trello.getCards(getTestList());
 		Assert.assertEquals(1, allCards.size());
+	}
+	
+	private void deleteWebhook(TrelloWebhook hook){
+		trello.deleteWebhook(hook.id);
 	}
 
 	private TrelloList getTestList() {

@@ -1,7 +1,7 @@
 package garanhani.trello;
 
 public interface WebhookService {
-	public void createWebhook(String description, String callbackUrl, String idModel);
+	public TrelloWebhook createWebhook(String description, String callbackUrl, String idModel);
 	
 //	public void deleteWebhook(String id);
 	

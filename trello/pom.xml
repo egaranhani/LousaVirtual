@@ -14,6 +14,7 @@
   <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
   </properties>
   <dependencies>
     <dependency>
@@ -44,12 +45,5 @@
 		<version>1.8.0</version>
 	</dependency>			
   </dependencies>
-  <repositories>
-    <repository>
-      <id>oauth</id>
-      <name>OAuth Repository</name>
-      <url>http://oauth.googlecode.com/svn/code/maven</url>
-    </repository>
-  </repositories>
   
 </project>

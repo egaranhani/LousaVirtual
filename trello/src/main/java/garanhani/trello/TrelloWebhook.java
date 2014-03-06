@@ -1,5 +1,8 @@
 package garanhani.trello;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TrelloWebhook {
 	public String id;
 
@@ -8,6 +11,8 @@ public class TrelloWebhook {
 	public String callbackURL;
 	
 	public String idModel;
+	
+	public boolean active;
 	
 	@Override
 	public String toString() {
